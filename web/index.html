@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tributa.AI — Agente da Reforma Tributária</title>
+  <meta name="description" content="Agente de IA que lê uma nota fiscal, apura a carga atual e simula a Reforma Tributária (CBS/IBS/IS) de 2026 a 2033 — explicando em português." />
+  <meta property="og:title" content="Tributa.AI — Agente da Reforma Tributária" />
+  <meta property="og:description" content="IA que lê a NF-e, calcula hoje vs. o novo regime e explica o impacto da Reforma Tributária." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232dd4bf'/%3E%3Cstop offset='1' stop-color='%237b3ff2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%230a0e16'/%3E%3Cpath d='M9 21L21 9' stroke='url(%23g)' stroke-width='2.6' stroke-linecap='round'/%3E%3Ccircle cx='11' cy='11.5' r='2.4' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ccircle cx='21' cy='20.5' r='2.4' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <script>document.documentElement.classList.add('js')</script>
+  <div class="scroll-progress" aria-hidden="true"><span id="progress"></span></div>
+  <div class="bg-aurora" aria-hidden="true">
+    <span class="blob blob--1"></span><span class="blob blob--2"></span><span class="blob blob--3"></span>
+  </div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ===== Topbar ===== -->
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#top" aria-label="Tributa.AI">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="26" height="26"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2dd4bf"/><stop offset="1" stop-color="#8b7bff"/></linearGradient></defs>
+          <path d="M9 21L21 9" stroke="url(#bg)" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="11" cy="11.5" r="2.6" fill="none" stroke="url(#bg)" stroke-width="2"/>
+          <circle cx="21" cy="20.5" r="2.6" fill="none" stroke="url(#bg)" stroke-width="2"/></svg>
+      </span>
+      <span class="brand__name">Tributa<b>.AI</b></span>
+    </a>
+    <nav class="topbar__nav">
+      <a href="#como">Como funciona</a>
+      <a href="#app">Testar agora</a>
+      <a href="#lote">Em lote</a>
+      <a href="#mapa">Mapa</a>
+    </nav>
+    <div class="topbar__meta">
+      <span class="engine-badge" id="engineBadge" title="Fonte de cálculo"><i class="dot"></i><span id="engineLabel">motor local</span></span>
+      <a class="ghost-link" href="https://github.com/BrianLaureano" target="_blank" rel="noopener">Código ↗</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================= HERO / BILLBOARD ======================= -->
+    <section class="cinema" id="top">
+      <div class="cinema__copy">
+        <p class="eyebrow reveal"><i></i> Agente de IA · Reforma Tributária 2026 → 2033</p>
+        <h1 class="cinema__title">
+          <span class="line"><span class="line__in chrome">A nota de hoje,</span></span>
+          <span class="line"><span class="line__in grad">lida pelo novo</span></span>
+          <span class="line"><span class="line__in grad">regime.</span></span>
+        </h1>
+        <p class="cinema__sub reveal">Um agente autônomo lê a sua <b>nota fiscal</b>, apura a carga <b>atual</b>
+          direto do documento e <b>simula a Reforma</b> (CBS, IBS e Imposto Seletivo) — explicando o impacto
+          em português, com o raciocínio na tela.</p>
+        <div class="cinema__cta reveal">
+          <a href="#app" class="btn btn--primary" data-magnetic><span>Analisar uma nota</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="#como" class="btn btn--ghost">Ver como funciona</a>
+        </div>
+        <p class="cinema__trust reveal">EC 132/2023 · LC 214/2025 · alíquotas de referência do Ministério da Fazenda</p>
+      </div>
+
+      <!-- teaser card ao vivo -->
+      <aside class="herocard" id="herocard" aria-hidden="true">
+        <div class="herocard__glow"></div>
+        <div class="herocard__bar"><i></i><i></i><i></i><span>NF-e · Indústria</span></div>
+        <div class="herocard__body">
+          <span class="herocard__label" id="hcLabel">carga hoje</span>
+          <div class="herocard__big"><span class="herocard__cur">R$</span><b id="hcValue">0</b></div>
+          <div class="herocard__meta"><span id="hcCarga">—</span><span class="herocard__reg" id="hcReg">regime atual</span></div>
+          <div class="herocard__bars">
+            <div class="hcbarrow"><span>Hoje</span><div class="hcbar"><i id="hcBarA"></i></div></div>
+            <div class="hcbarrow"><span>2027</span><div class="hcbar"><i id="hcBarB" class="is-new"></i></div></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- chips flutuantes -->
+      <div class="floaters" aria-hidden="true">
+        <span class="floater f1">CBS</span><span class="floater f2">IBS</span>
+        <span class="floater f3">IS</span><span class="floater f4">ICMS</span><span class="floater f5">ISS</span>
+      </div>
+      <a href="#como" class="scrollcue" aria-label="Rolar"><span></span></a>
+    </section>
+
+    <!-- ======================= TAPE ======================= -->
+    <section class="tape" aria-hidden="true">
+      <div class="tape__row">
+        <span>ICMS</span><b>→</b><span>CBS</span><b>·</b><span>PIS / COFINS</span><b>→</b><span>IBS</span><b>·</b><span>IPI</span><b>·</b><span>ISS</span><b>→</b><span>Imposto Seletivo</span><b>·</b>
+        <span>ICMS</span><b>→</b><span>CBS</span><b>·</b><span>PIS / COFINS</span><b>→</b><span>IBS</span><b>·</b><span>IPI</span><b>·</b><span>ISS</span><b>→</b><span>Imposto Seletivo</span><b>·</b>
+      </div>
+    </section>
+
+    <!-- ======================= STATS ======================= -->
+    <section class="statstrip">
+      <div class="stat reveal"><b><span data-count="5">0</span> → <span data-count="3">0</span></b><small>tributos viram</small></div>
+      <div class="stat reveal"><b><span data-count="26" data-suffix=",5%">0</span></b><small>alíquota de referência</small></div>
+      <div class="stat reveal"><b>2026<span class="stat__arrow">→</span>2033</b><small>janela de transição</small></div>
+      <div class="stat reveal"><b><span data-count="100" data-suffix="%">0</span></b><small>roda no navegador</small></div>
+    </section>
+
+    <!-- ======================= HOW IT WORKS ======================= -->
+    <section class="how" id="como">
+      <header class="sec-head reveal">
+        <span class="sec-kicker">Como funciona</span>
+        <h2>Quatro passos, um agente.</h2>
+      </header>
+      <div class="how__row">
+        <article class="poster reveal" data-tilt><span class="poster__n">01</span><h3>Lê a NF-e</h3><p>Extrai emitente, itens, NCM/CFOP e totais do XML — ou do que você colar.</p><div class="poster__glow"></div></article>
+        <article class="poster reveal" data-tilt><span class="poster__n">02</span><h3>Apura hoje</h3><p>Calcula a carga atual com os valores já apurados no documento. Sem chute.</p><div class="poster__glow"></div></article>
+        <article class="poster reveal" data-tilt><span class="poster__n">03</span><h3>Projeta a Reforma</h3><p>Simula CBS, IBS e Imposto Seletivo ano a ano, de 2026 a 2033.</p><div class="poster__glow"></div></article>
+        <article class="poster reveal" data-tilt><span class="poster__n">04</span><h3>Explica</h3><p>Responde em português e mostra cada tool-call do raciocínio.</p><div class="poster__glow"></div></article>
+      </div>
+    </section>
+
+    <!-- ======================= APP / TOOL ======================= -->
+    <section class="tool" id="app">
+      <header class="sec-head reveal">
+        <span class="sec-kicker">Experimente</span>
+        <h2>Analise uma nota agora.</h2>
+      </header>
+
+      <div class="panel step reveal" aria-labelledby="step1">
+        <div class="step__head"><span class="step__n">1</span><h3 id="step1">Escolha uma nota fiscal</h3></div>
+        <div class="samples" id="samples"></div>
+        <div class="drop" id="drop">
+          <div class="drop__inner">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            <span>ou <b>solte um XML de NF-e</b> aqui / cole abaixo</span>
+          </div>
+          <textarea id="xmlInput" class="drop__text" placeholder="<nfeProc>…cole o XML da sua NF-e aqui…</nfeProc>" spellcheck="false"></textarea>
+        </div>
+      </div>
+
+      <div class="panel step reveal" aria-labelledby="step2">
+        <div class="step__head"><span class="step__n">2</span><h3 id="step2">Ano-alvo e alíquotas</h3></div>
+        <div class="years" id="years" role="tablist" aria-label="Ano-alvo"></div>
+
+        <div class="rates">
+          <div class="rates__head">
+            <span class="rates__title">Alíquotas de referência <span class="tag-est" title="Estimativa oficial do Ministério da Fazenda — ainda serão fixadas por Resolução do Senado">estimativa · editável</span></span>
+            <button class="minibtn" id="resetRates" type="button">voltar ao padrão</button>
+          </div>
+          <p class="rates__hint">O IVA do novo regime (CBS + IBS) <b>ainda não é definitivo</b>. Ajuste e veja o impacto recalcular na hora.</p>
+          <div class="rates__grid">
+            <label class="rate">
+              <span class="rate__k">CBS <b id="cbsVal">8,8%</b></span>
+              <input type="range" id="cbsRange" min="0" max="20" step="0.1" value="8.8" aria-label="Alíquota de referência CBS" />
+            </label>
+            <label class="rate">
+              <span class="rate__k">IBS <b id="ibsVal">17,7%</b></span>
+              <input type="range" id="ibsRange" min="0" max="30" step="0.1" value="17.7" aria-label="Alíquota de referência IBS" />
+            </label>
+            <div class="rate__total">IVA total<b id="ivaTotal">26,5%</b></div>
+          </div>
+        </div>
+
+        <button class="btn btn--primary cta" id="analyzeBtn" data-magnetic disabled>
+          <span class="cta__spark" aria-hidden="true"></span><span id="analyzeLabel">Analisar nota</span>
+        </button>
+      </div>
+
+      <section id="results" class="results" hidden>
+        <div class="results__bar">
+          <span class="results__title" id="resultTitle">Análise</span>
+          <div class="results__actions">
+            <button class="minibtn" id="copyBtn" type="button">Copiar resumo</button>
+            <button class="minibtn" id="exportBtn" type="button">Exportar JSON</button>
+          </div>
+        </div>
+        <div class="kpis" id="kpis"></div>
+        <div class="grid2">
+          <article class="panel card">
+            <header class="card__head"><h3>Composição da carga</h3><span class="card__sub" id="compareSub">hoje × 2027</span></header>
+            <div class="chart" id="compareChart"></div>
+            <div class="legend" id="legend"></div>
+          </article>
+          <article class="panel card">
+            <header class="card__head"><h3>Raciocínio do agente</h3><span class="card__sub" id="agentSrc">ao vivo</span></header>
+            <div class="agent" id="agentSteps"></div>
+          </article>
+        </div>
+        <article class="panel card">
+          <header class="card__head"><h3>Transição ano a ano · 2026 → 2033</h3><span class="card__sub">linha tracejada = carga de hoje</span></header>
+          <div class="chart" id="timelineChart"></div>
+        </article>
+        <div class="grid2">
+          <article class="panel card">
+            <header class="card__head"><h3>Documento</h3><span class="card__sub" id="docKey"></span></header>
+            <div class="doc" id="docBody"></div>
+          </article>
+          <article class="panel card">
+            <header class="card__head"><h3>Consistência fiscal</h3></header>
+            <div class="anomalies" id="anomalies"></div>
+          </article>
+        </div>
+        <article class="panel card chat">
+          <header class="card__head"><h3>Pergunte ao agente</h3><span class="card__sub">em português</span></header>
+          <div class="chat__suggest" id="chatSuggest"></div>
+          <div class="chat__log" id="chatLog"></div>
+          <form class="chat__form" id="chatForm">
+            <input id="chatInput" autocomplete="off" placeholder="Ex.: e se fosse 2030? tem algo errado na nota?" />
+            <button type="submit" aria-label="Enviar">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </form>
+        </article>
+      </section>
+    </section>
+
+    <!-- ======================= BATCH / LOTE ======================= -->
+    <section class="tool" id="lote">
+      <header class="sec-head reveal">
+        <span class="sec-kicker">Em escala</span>
+        <h2>A operação inteira, não uma nota.</h2>
+        <p class="sec-lede">É assim que uma empresa sente a Reforma: milhares de notas por mês. Agregue uma carteira e veja o impacto consolidado.</p>
+      </header>
+
+      <div class="panel step reveal">
+        <div class="lote__controls">
+          <button class="btn btn--primary cta" id="loteExample" data-magnetic><span class="cta__spark" aria-hidden="true"></span><span>Carregar carteira de exemplo (12 notas)</span></button>
+          <div class="drop drop--mini" id="loteDrop">
+            <div class="drop__inner">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+              <span>ou <b>solte vários XMLs</b> de NF-e aqui</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loteResults" class="results" hidden>
+        <div class="kpis" id="loteKpis"></div>
+        <div class="grid2">
+          <article class="panel card">
+            <header class="card__head"><h3>Carga consolidada · 2026 → 2033</h3><span class="card__sub">linha tracejada = hoje</span></header>
+            <div class="chart" id="loteChart"></div>
+            <div class="legend" id="loteLegend"></div>
+          </article>
+          <article class="panel card">
+            <header class="card__head"><h3>Impacto por setor</h3></header>
+            <div id="loteSetores"></div>
+          </article>
+        </div>
+        <article class="panel card">
+          <header class="card__head"><h3>Notas com maior aumento de carga</h3><span class="card__sub">hoje → regime pleno (2033)</span></header>
+          <div id="loteTable"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ======================= MAPA ======================= -->
+    <section class="tool" id="mapa">
+      <header class="sec-head reveal">
+        <span class="sec-kicker">No mapa</span>
+        <h2>Quais estados serão mais afetados.</h2>
+        <p class="sec-lede">O imposto estadual passa a ser cobrado no <b>destino</b> (consumo), não na origem.
+          Estados produtores tendem a perder arrecadação; consumidores, a ganhar. Alíquotas de ICMS de 2026 — dados reais.</p>
+      </header>
+      <div class="panel reveal">
+        <div class="map__toolbar">
+          <div class="seg" id="mapSeg">
+            <button class="seg__btn is-on" type="button" data-mode="impact">Impacto na Reforma</button>
+            <button class="seg__btn" type="button" data-mode="rate">ICMS hoje</button>
+          </div>
+          <div class="legend" id="mapLegend"></div>
+        </div>
+        <div class="map__wrap">
+          <div class="map__grid" id="mapGrid" role="group" aria-label="Estados do Brasil"></div>
+          <div class="map__detail" id="mapDetail"></div>
+        </div>
+        <p class="map__src">Fontes: tabela ICMS 2026 por UF; direção do impacto pelo princípio do destino (estudo IPEA). Partilha do IBS em transição até 2078.</p>
+      </div>
+    </section>
+
+    <details class="premissas">
+      <summary>Premissas e metodologia do cálculo</summary>
+      <ul>
+        <li><b>Regime atual</b>: usa os tributos <b>já apurados no XML</b> (vICMS, vPIS, vCOFINS, vIPI) — não é estimativa. Sem valores no XML, cai em alíquotas nominais padrão.</li>
+        <li><b>CBS/IBS</b>: alíquotas de <b>referência</b> (estimativa oficial MF: 8,8% + 17,7% ≈ 26,5%), editáveis acima; serão fixadas por Resolução do Senado.</li>
+        <li><b>2026</b> é ano-teste: CBS 0,9% e IBS 0,1% são <b>compensáveis</b>, então a carga fica praticamente igual à de hoje.</li>
+        <li><b>2027</b>: PIS/COFINS extintos, CBS cheia, IPI → 0 (salvo ZFM), IS inicia, IBS a 0,1%. <b>2029–2033</b>: IBS sobe (10/20/30/40/100%) e ICMS/ISS caem (90/80/70/60/0%).</li>
+        <li><b>ICMS</b>: alíquota interna varia por UF (17% a 23% em 2026); interestadual é 12% (geral), 7% (Sul/Sudeste exceto ES → Norte/Nordeste/Centro-Oeste e ES) ou 4% (importados). O mapa usa as alíquotas internas reais de 2026.</li>
+        <li><b>Impacto por estado</b>: o IBS é cobrado no <b>destino</b> e uniforme no país — produtores tendem a perder e consumidores a ganhar arrecadação (direção conforme estudo do IPEA). A partilha migra até 2078.</li>
+        <li><b>Simplificações</b>: valores nominais por item, assumindo não-cumulatividade plena. Não modela substituição tributária, monofásico, regimes específicos (combustíveis, financeiro), Simples Nacional nem split payment.</li>
+        <li><b>Base legal</b>: EC 132/2023 e LC 214/2025; cronograma do ADCT. Alíquotas ICMS: legislações estaduais vigentes em 2026.</li>
+      </ul>
+    </details>
+
+    <footer class="site-foot">
+      <p><b>Tributa.AI</b> — demo técnica de agente de IA sobre dados fiscais. Carga atual apurada do XML;
+        alíquotas CBS/IBS são de referência (estimativa oficial do Ministério da Fazenda, a fixar por
+        Resolução do Senado). Fontes: LC 214/2025, EC 132/2023.</p>
+      <p class="site-foot__by">Projeto por Brian Laureano · <a href="https://github.com/BrianLaureano" target="_blank" rel="noopener">GitHub</a></p>
+    </footer>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/motion.js"></script>
+</body>
+</html>
