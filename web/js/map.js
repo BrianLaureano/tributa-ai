@@ -31,6 +31,35 @@ const rateColor = (icms) => lerpHex("#1a6b7a", "#56e8ff", Math.max(0, Math.min(1
 const colorFor = (e, mode) => mode === "impact" ? (e.perde ? LOSE : GAIN) : rateColor(e.icms);
 const fmt = (n) => String(n).replace(".", ",") + "%";
 
+/* centro geométrico (para posicionar a sigla) a partir do maior polígono da UF */
+function parsePts(s) {
+  const nums = s.split(/[ ,]+/).map(Number).filter((n) => !isNaN(n));
+  const p = []; for (let i = 0; i + 1 < nums.length; i += 2) p.push([nums[i], nums[i + 1]]);
+  return p;
+}
+function polyCentroid(pts) {
+  let A = 0, cx = 0, cy = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
+    const cr = x0 * y1 - x1 * y0; A += cr; cx += (x0 + x1) * cr; cy += (y0 + y1) * cr;
+  }
+  A *= 0.5;
+  if (Math.abs(A) < 1e-6) { const n = pts.length; return [pts.reduce((s, p) => s + p[0], 0) / n, pts.reduce((s, p) => s + p[1], 0) / n]; }
+  return [cx / (6 * A), cy / (6 * A)];
+}
+function labelPos(shapes) {
+  let best = null, bestA = -1;
+  for (const [t, v] of shapes) {
+    if (t !== "poly") continue;
+    const pts = parsePts(v); if (pts.length < 3) continue;
+    let A = 0; for (let i = 0; i < pts.length; i++) { const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length]; A += x0 * y1 - x1 * y0; }
+    A = Math.abs(A); if (A > bestA) { bestA = A; best = polyCentroid(pts); }
+  }
+  return best;
+}
+// ajustes finos para UFs pequenas/sobrepostas (unidades do viewBox)
+const LABEL_NUDGE = { DF: [3, -1], SE: [1.5, 0], RJ: [2.5, 1], ES: [2, 0], AL: [1.5, -0.5], RN: [1, -1], PB: [1.5, 0.5], PE: [-2, 0] };
+
 let rafId = null, resizeH = null;
 
 export function renderMap(stage, legendEl, detailEl, mode = "impact") {
@@ -47,6 +76,7 @@ export function renderMap(stage, legendEl, detailEl, mode = "impact") {
   svg.setAttribute("role", "group");
   svg.setAttribute("aria-label", "Mapa do Brasil por estado");
 
+  const groups = {};
   for (const uf of Object.keys(BR_SHAPES)) {
     const e = ESTADOS.find((x) => x.uf === uf);
     const color = colorFor(e, mode);
@@ -63,9 +93,27 @@ export function renderMap(stage, legendEl, detailEl, mode = "impact") {
     g.addEventListener("click", show);
     g.setAttribute("tabindex", "0");
     g.addEventListener("focus", show);
+    groups[uf] = g;
     svg.appendChild(g);
   }
-  stage.appendChild(svg);
+  stage.appendChild(svg);   // precisa estar no DOM para getBBox()
+
+  // rótulos (siglas das UFs) por cima dos contornos
+  const labels = document.createElementNS(SVGNS, "g");
+  labels.setAttribute("class", "uf-labels");
+  for (const uf of Object.keys(BR_SHAPES)) {
+    let pos = labelPos(BR_SHAPES[uf]);          // centroide do polígono
+    if (!pos) { try { const b = groups[uf].getBBox(); pos = [b.x + b.width / 2, b.y + b.height / 2]; } catch (_) { } }
+    if (!pos) continue;
+    const nudge = LABEL_NUDGE[uf] || [0, 0];
+    const t = document.createElementNS(SVGNS, "text");
+    t.setAttribute("x", pos[0] + nudge[0]);
+    t.setAttribute("y", pos[1] + nudge[1]);
+    t.setAttribute("class", "uf-label");
+    t.textContent = uf;
+    labels.appendChild(t);
+  }
+  svg.appendChild(labels);
 
   legendEl.innerHTML = mode === "impact"
     ? `<span class="legend-item"><i style="background:${GAIN}"></i>Tende a ganhar (consumo)</span>

@@ -368,6 +368,9 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) 80px
 .uf-shape:hover polygon, .uf-shape:hover path, .uf-shape:focus polygon, .uf-shape:focus path,
 .uf-shape.is-on polygon, .uf-shape.is-on path { fill: color-mix(in srgb, var(--c) 45%, transparent); filter: drop-shadow(0 0 6px var(--c)); }
 .uf-shape:focus { outline: none; }
+.uf-labels { pointer-events: none; }
+.uf-label { font-family: var(--mono); font-size: 6px; font-weight: 600; fill: #eaf6ff; text-anchor: middle; dominant-baseline: central;
+  paint-order: stroke; stroke: rgba(4, 7, 13, 0.85); stroke-width: 1.1px; stroke-linejoin: round; letter-spacing: -0.3px; }
 .map__detail { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; min-height: 160px; }
 .mapd__h { display: flex; align-items: center; gap: 10px; font-family: var(--disp); font-size: 1.1rem; margin-bottom: 14px; }
 .mapd__row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--ink-2); }
