@@ -358,11 +358,16 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) 80px
 .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 11px; padding: 3px; }
 .seg__btn { cursor: pointer; font-size: 0.84rem; color: var(--ink-2); padding: 8px 14px; border: none; background: transparent; border-radius: 8px; transition: .18s; }
 .seg__btn.is-on { color: #061016; background: var(--grad); font-weight: 600; }
-.map__wrap { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; }
-.map__grid { display: grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: 1fr; gap: 6px; width: min(100%, 460px); }
-.uf { aspect-ratio: 1; border-radius: 9px; border: 1px solid rgba(0,0,0,.25); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-family: var(--mono); line-height: 1.05; transition: transform .14s var(--ease), box-shadow .14s; }
-.uf b { font-size: 0.82rem; } .uf small { font-size: 0.58rem; opacity: 0.85; }
-.uf:hover, .uf:focus { transform: scale(1.12); outline: none; z-index: 3; box-shadow: 0 0 0 2px var(--ink), 0 8px 20px -6px rgba(0,0,0,.6); }
+.map__wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; align-items: center; }
+.map__stage { position: relative; width: 100%; max-width: 520px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(46,230,214,0.07), transparent 60%), #04070d; }
+.map__particles { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.map__svg { position: relative; z-index: 1; width: 100%; height: auto; display: block; padding: 10px; }
+.uf-shape { cursor: pointer; }
+.uf-shape polygon, .uf-shape path { fill: color-mix(in srgb, var(--c) 13%, transparent); stroke: var(--c); stroke-width: 0.8; stroke-linejoin: round; filter: drop-shadow(0 0 1.5px var(--c)); transition: fill .2s, filter .2s; }
+.uf-shape:hover polygon, .uf-shape:hover path, .uf-shape:focus polygon, .uf-shape:focus path,
+.uf-shape.is-on polygon, .uf-shape.is-on path { fill: color-mix(in srgb, var(--c) 45%, transparent); filter: drop-shadow(0 0 6px var(--c)); }
+.uf-shape:focus { outline: none; }
 .map__detail { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; min-height: 160px; }
 .mapd__h { display: flex; align-items: center; gap: 10px; font-family: var(--disp); font-size: 1.1rem; margin-bottom: 14px; }
 .mapd__row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--ink-2); }
@@ -370,9 +375,9 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) 80px
 .mapd__note { margin-top: 12px; font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
 .mapd__hint { color: var(--ink-3); font-size: 0.9rem; margin-bottom: 10px; }
 .map__src { margin-top: 16px; font-size: 0.76rem; color: var(--ink-3); }
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   .map__wrap { grid-template-columns: 1fr; }
-  .map__grid { width: 100%; margin: 0 auto; }
+  .map__stage { max-width: 440px; }
 }
 
 /* ---- micro-interactions ---- */
