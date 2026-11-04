@@ -212,8 +212,10 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) 80px
 .tag-est { font-family: var(--font); font-weight: 500; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal); background: rgba(45,212,191,.1); border: 1px solid var(--border-str); border-radius: 999px; padding: 3px 9px; margin-left: 6px; cursor: help; }
 #resetRates { display: none; }
 #resetRates.is-shown { display: inline-block; }
-.rates__hint { font-size: 0.82rem; color: var(--ink-2); margin: 8px 0 14px; }
+.rates__hint { font-size: 0.82rem; color: var(--ink-2); margin: 8px 0 12px; }
 .rates__hint b { color: var(--ink); }
+.rates__presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.rates__plabel { font-size: 0.78rem; color: var(--ink-3); }
 .rates__grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px 22px; align-items: center; }
 .rate { display: flex; flex-direction: column; gap: 8px; }
 .rate__k { font-family: var(--mono); font-size: 0.82rem; color: var(--ink-2); display: flex; justify-content: space-between; }

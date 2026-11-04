@@ -158,6 +158,8 @@ function setupRates() {
   cbs.addEventListener("input", sync);
   ibs.addEventListener("input", sync);
   $("#resetRates").addEventListener("click", () => { cbs.value = fiscal.DEFAULT_CBS; ibs.value = fiscal.DEFAULT_IBS; sync(); });
+  document.querySelectorAll(".rates__presets .chip").forEach((c) =>
+    c.addEventListener("click", () => { cbs.value = c.dataset.cbs; ibs.value = c.dataset.ibs; sync(); }));
   sync();
 }
 

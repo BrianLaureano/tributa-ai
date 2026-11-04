@@ -148,7 +148,12 @@
             <span class="rates__title">Alíquotas de referência <span class="tag-est" title="Estimativa oficial do Ministério da Fazenda — ainda serão fixadas por Resolução do Senado">estimativa · editável</span></span>
             <button class="minibtn" id="resetRates" type="button">voltar ao padrão</button>
           </div>
-          <p class="rates__hint">O IVA do novo regime (CBS + IBS) <b>ainda não é definitivo</b>. Ajuste e veja o impacto recalcular na hora.</p>
+          <p class="rates__hint">O IVA do novo regime (CBS + IBS) <b>ainda não é definitivo</b>. Em nov/2026 o <b>TCU</b> calculou a CBS de referência em <b>11,3%</b> e o <b>Comitê Gestor</b> estima o IVA total em <b>27,91%</b> — o Senado fixa por resolução até <b>15/12/2026</b>. Ajuste e veja recalcular.</p>
+          <div class="rates__presets">
+            <span class="rates__plabel">Estimativas oficiais:</span>
+            <button class="chip" type="button" data-cbs="8.8" data-ibs="17.7">MF 2024 · 26,5%</button>
+            <button class="chip" type="button" data-cbs="9.21" data-ibs="18.70">CGIBS 2026 · 27,91%</button>
+          </div>
           <div class="rates__grid">
             <label class="rate">
               <span class="rate__k">CBS <b id="cbsVal">8,8%</b></span>
@@ -283,7 +288,7 @@
       <summary>Premissas e metodologia do cálculo</summary>
       <ul>
         <li><b>Regime atual</b>: usa os tributos <b>já apurados no XML</b> (vICMS, vPIS, vCOFINS, vIPI) — não é estimativa. Sem valores no XML, cai em alíquotas nominais padrão.</li>
-        <li><b>CBS/IBS</b>: alíquotas de <b>referência</b> (estimativa oficial MF: 8,8% + 17,7% ≈ 26,5%), editáveis acima; serão fixadas por Resolução do Senado.</li>
+        <li><b>CBS/IBS</b>: alíquotas de <b>referência</b>, editáveis acima. Estimativas oficiais: MF/2024 ≈ <b>26,5%</b> (CBS 8,8 + IBS 17,7); Comitê Gestor (Res. CGIBS 14/2026) ≈ <b>27,91%</b> (CBS 9,21 + IBS 18,70); TCU/out-2026 calculou a CBS em <b>11,3%</b>. O Senado fixa por resolução até <b>15/12/2026</b>.</li>
         <li><b>2026</b> é ano-teste: CBS 0,9% e IBS 0,1% são <b>compensáveis</b>, então a carga fica praticamente igual à de hoje.</li>
         <li><b>2027</b>: PIS/COFINS extintos, CBS cheia, IPI → 0 (salvo ZFM), IS inicia, IBS a 0,1%. <b>2029–2033</b>: IBS sobe (10/20/30/40/100%) e ICMS/ISS caem (90/80/70/60/0%).</li>
         <li><b>ICMS</b>: alíquota interna varia por UF (17% a 23% em 2026); interestadual é 12% (geral), 7% (Sul/Sudeste exceto ES → Norte/Nordeste/Centro-Oeste e ES) ou 4% (importados). O mapa usa as alíquotas internas reais de 2026.</li>
