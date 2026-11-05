@@ -94,14 +94,19 @@ cd backend && python -m pytest        # 10 passed
 ## Precisão e fontes
 
 - A **carga atual** vem dos valores apurados no XML — é o dado real do documento.
-- As **alíquotas de CBS/IBS** são de **referência (estimativa oficial do Ministério da
-  Fazenda: CBS 8,8% + IBS 17,7% ≈ 26,5%)** e serão fixadas por Resolução do Senado — por
-  isso são **editáveis no próprio site** (sliders) e via API (`cbs_ref`/`ibs_ref`).
+- As **alíquotas de CBS/IBS** são de **referência** e serão fixadas por Resolução do Senado
+  (até **15/12/2026**) — por isso são **editáveis no próprio site** (sliders/presets) e via
+  API (`cbs_ref`/`ibs_ref`). Estimativas oficiais: **MF/2024 ≈ 26,5%** (CBS 8,8 + IBS 17,7);
+  **CGIBS/2026 ≈ 27,91%** (CBS 9,21 + IBS 18,70); **TCU/out-2026 calculou a CBS em 11,3%**
+  (número contestado por CNI e pelo relator no Senado).
 - **2026 é ano-teste**: CBS 0,9% e IBS 0,1% são **compensáveis** — a carga fica quase igual
   à de hoje (o modelo trata isso, não soma por cima). **2027**: CBS cheia, PIS/COFINS
-  extintos, IPI → 0 (salvo ZFM), IS inicia, IBS a 0,1%. **2029–2033**: IBS 10/20/30/40/100%
+  extintos, IPI → 0 (salvo ZFM), IBS a 0,1%. **2029–2033**: IBS 10/20/30/40/100%
   e ICMS/ISS 90/80/70/60/0%.
-- Base legal: **EC 132/2023** e **LC 214/2025**; cronograma de transição do ADCT.
+- **Imposto Seletivo**: definido pela **MP 1.399/2026** (04/11/2026), cobrado a partir de
+  **1º/02/2027**; no 1º ano a base é o IPI atual com fatores de ajuste. As alíquotas de IS
+  por NCM na simulação são **estimativas ilustrativas**, parametrizáveis.
+- Base legal: **EC 132/2023**, **LC 214/2025**, **MP 1.399/2026**; cronograma do ADCT.
 - Metodologia simplificada (também exposta na tela, em "Premissas"): valores nominais por
   item, não-cumulatividade plena; não modela substituição tributária, monofásico, regimes
   específicos (combustíveis/financeiro), Simples Nacional nem split payment.
